@@ -82,9 +82,15 @@ RUN set -x \
 		&& make -j$(nproc) \
 		&& make install \
 	) \
+
+##install netstat
+        && apt update \
+        && apt-get install -y --no-install-recommends net-tools \
+        && ln -s /usr/local/tomcat/bin/startup.sh /etc/init.d/tomcat.sh \
+        && service tomcat.sh enable\
 	&& apt-get purge -y --auto-remove $nativeBuildDeps \
 	&& rm -rf "$nativeBuildDir" \
-	&& rm bin/tomcat-native.tar.gz
+	&& rm bin/tomcat-native.tar.gz 
 
 # verify Tomcat Native is working properly
 RUN set -e \
